@@ -1,10 +1,17 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from app.models.user import User
-from app.repository.user import get_user
+from fastapi.param_functions import Body
+from app.schemas.user import User, UserForm
+from app.repository.user import get_user, save_user
 
 from ..dependencies import get_current_active_user
 
 router = APIRouter()
+
+
+@router.post("/users/", response_model=User, status_code=status.HTTP_201_CREATED)
+async def register_user(user: UserForm = Body(...)):
+    saved_user = await save_user(user)
+    return saved_user
 
 
 @router.get("/users/me/", response_model=User)
