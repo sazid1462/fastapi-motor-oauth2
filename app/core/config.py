@@ -20,9 +20,10 @@ class Settings(BaseSettings):
     mongodb_db_name: str = "sbdb"
     # to get a string like this run:
     # openssl rand -hex 32
-    secret_key: str = "30855ff5d6a40ec61b05eefa0d6107f43e4a60de474e2adacd075a9c9211345e"
+    secret_key: str = "secret_key"
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 30
+    refresh_token_expire_minutes: int = 3600
     host: str = "127.0.0.1"
     port: int = 8000
     log_level: str = "DEBUG"

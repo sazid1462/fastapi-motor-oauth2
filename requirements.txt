@@ -12,3 +12,4 @@ watchgod==0.7
 websockets==10.0
 python-multipart==0.0.5
 gunicorn==20.1.0
+python-jose==3.3.0

@@ -1,40 +1,26 @@
-from passlib.context import CryptContext
 from datetime import datetime, timedelta
 from typing import Optional
-from jose import JWTError, jwt
+from jose import jwt
+from app.core.security.pass_util import verify_password
 
 from app.repository.user import get_user
 from app.core.config import settings
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-
-def verify_password(plain_password, hashed_password):
-
-    return pwd_context.verify(plain_password, hashed_password)
+from app.schemas.user import User
 
 
-def get_password_hash(password):
-
-    return pwd_context.hash(password)
-
-
-def authenticate_user(username: str, password: str):
-
-    user = get_user(username)
+async def authenticate_user(username: str, password: str):
+    user = await get_user(username)
 
     if not user:
-
         return False
 
-    if not verify_password(password, user.hashed_password):
-
+    if not verify_password(password, user.password):
         return False
 
     return user
 
 
-def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
+def create_jwt_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
@@ -44,3 +30,25 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     encoded_jwt = jwt.encode(
         to_encode, settings.secret_key, algorithm=settings.jwt_algorithm)
     return encoded_jwt
+
+
+def create_access_token(data: dict):
+    access_token_expires = timedelta(
+        minutes=settings.access_token_expire_minutes)
+    return create_jwt_token(data, access_token_expires)
+
+
+def create_refresh_token(data: dict):
+    refresh_token_expires = timedelta(
+        minutes=settings.refresh_token_expire_minutes)
+    return create_jwt_token(data, refresh_token_expires)
+
+
+def create_tokens(user: User):
+    access_token = create_access_token(
+        data={"sub": user.username}
+    )
+    refresh_token = create_refresh_token(
+        data={"sub": user.username}
+    )
+    return {"access_token": access_token, "token_type": "bearer", "refresh_token": refresh_token}
