@@ -6,6 +6,7 @@ from app.core.security.pass_util import verify_password
 from app.repository.user import get_user
 from app.core.config import settings
 from app.schemas.user import User
+from loguru import logger
 
 
 async def authenticate_user(username: str, password: str):
@@ -52,3 +53,7 @@ def create_tokens(user: User):
         data={"sub": user.username}
     )
     return {"access_token": access_token, "token_type": "bearer", "refresh_token": refresh_token}
+
+
+def verify_token(token: str):
+    return jwt.decode(token, settings.secret_key, algorithms=[settings.jwt_algorithm])
