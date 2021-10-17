@@ -10,6 +10,8 @@ from app.models.object_id import PyObjectId
 class User(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     username: str = Field(...)
+    role: str = Field(...)
+    profile_photo: Optional[str] = None
     email: Optional[EmailStr] = None
     full_name: Optional[str] = None
     disabled: Optional[bool] = None

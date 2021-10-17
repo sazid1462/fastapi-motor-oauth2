@@ -23,7 +23,7 @@ class Settings(BaseSettings):
     secret_key: str = "secret_key"
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 30
-    refresh_token_expire_minutes: int = 3600
+    refresh_token_expire_minutes: int = 360
     host: str = "127.0.0.1"
     port: int = 8000
     log_level: str = "DEBUG"

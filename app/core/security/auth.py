@@ -47,10 +47,12 @@ def create_refresh_token(data: dict):
 
 def create_tokens(user: User):
     access_token = create_access_token(
-        data={"sub": user.username}
+        data={"sub": user.username, "name": user.full_name,
+              "role": user.role, "image": user.profile_photo}
     )
     refresh_token = create_refresh_token(
-        data={"sub": user.username}
+        data={"sub": user.username, "name": user.full_name,
+              "role": user.role, "image": user.profile_photo}
     )
     return {"access_token": access_token, "token_type": "bearer", "refresh_token": refresh_token}
 
