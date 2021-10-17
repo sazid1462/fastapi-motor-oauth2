@@ -23,8 +23,10 @@ async def save_user(user: UserForm) -> UserModel:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail=f"User already exists!")
 
+    role = "admin" if await db[collection_name].estimated_document_count() == 0 else "user"
     user.password = get_password_hash(user.password)
-    user = jsonable_encoder(user)
-    new_user = await db[collection_name].insert_one(user)
+    userToSave = UserModel(**user.dict(), role=role)
+    userToSave = jsonable_encoder(userToSave)
+    new_user = await db[collection_name].insert_one(userToSave)
     created_user = await db[collection_name].find_one({"_id": new_user.inserted_id})
     return UserModel(**created_user)

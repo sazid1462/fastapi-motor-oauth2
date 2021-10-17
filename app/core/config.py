@@ -16,14 +16,14 @@ class Settings(BaseSettings):
     terms_of_service: str = ""
     contact_person: str = "Sazedul Islam"
     contact_email: str = "sazidmailbox@gmail.com"
-    mongodb_url: str = "mongodb+srv://sbuser:sbdbuser@dev.4vobw.mongodb.net/sbdb?retryWrites=true&w=majority"
+    mongodb_url: str = "mongodb+srv://user:password@localhost:27017/sbdb"
     mongodb_db_name: str = "sbdb"
     # to get a string like this run:
     # openssl rand -hex 32
     secret_key: str = "secret_key"
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 30
-    refresh_token_expire_minutes: int = 3600
+    refresh_token_expire_minutes: int = 360
     host: str = "127.0.0.1"
     port: int = 8000
     log_level: str = "DEBUG"
